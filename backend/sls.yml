@@ -41,24 +41,24 @@ provider:
             - xray:PutTelemetryRecords
             - xray:PutTraceSegments
           Resource: "*"
-        # - Effect: Allow
-        #   Action:
-        #     - dynamodb:Query
-        #     - dynamodb:GetItem
-        #     - dynamodb:PutItem
-        #     - dynamodb:UpdateItem
-        #     - dynamodb:DeleteItem
-        #   Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
-        # - Effect: Allow
-        #   Action:
-        #     - dynamodb:Query
-        #     - dynamodb:Scan
-        #   Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/*"
-        # - Effect: Allow
-        #   Action:
-        #     - s3:PutObject
-        #     - s3:GetObject
-        #   Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+          Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/*"
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+          Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
 
 functions:
 
@@ -77,19 +77,10 @@ functions:
           authorizer: Auth
     iamRoleStatementsInherit: true
     iamRoleStatements:
-      # - Effect: Allow
-      #   Action:
-      #     - dynamodb:Query
-      #   Resource: !GetAtt TodosTable.Arn
-        # edit
       - Effect: Allow
         Action:
           - dynamodb:Query
-        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
-      - Effect: Allow
-        Action:
-          - dynamodb:Query
-        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/*"
+        Resource: !GetAtt TodosTable.Arn
 
 
   # DONE: Configure this function - 
@@ -107,17 +98,11 @@ functions:
           request:
             schemas:
               application/json: ${file(models/create-todo-model.json)}
-    iamRoleStatementsInherit: true
     iamRoleStatements:
-      # - Effect: Allow
-      #   Action:
-      #     - dynamodb:PutItem
-      #   Resource: !GetAtt TodosTable.Arn
       - Effect: Allow
         Action:
           - dynamodb:PutItem
-        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
-
+        Resource: !GetAtt TodosTable.Arn
 
   # DONE: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
@@ -134,20 +119,10 @@ functions:
               application/json: ${file(models/update-todo-model.json)}
     iamRoleStatementsInherit: true
     iamRoleStatements:
-      # - Effect: Allow
-      #   Action:
-      #     - dynamodb:UpdateItem
-      #   Resource: !GetAtt TodosTable.Arn 
-      # Edit
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
-        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
-      # - Effect: Allow
-      #   Action:
-      #     - s3:PutObject
-      #     - s3:GetObject
-      #   Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+        Resource: !GetAtt TodosTable.Arn  
 
   # DONE: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements
@@ -161,20 +136,11 @@ functions:
           authorizer: Auth
     iamRoleStatementsInherit: true
     iamRoleStatements:
-      # - Effect: Allow
-      #   Action:
-      #     - dynamodb:DeleteItem
-      #   Resource: !GetAtt TodosTable.Arn
-      # Edit
       - Effect: Allow
         Action:
           - dynamodb:DeleteItem
-        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
-      # - Effect: Allow
-      #   Action:
-      #     - s3:PutObject
-      #     - s3:GetObject
-      #   Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+        Resource: !GetAtt TodosTable.Arn
+
 
   # DONE: Configure this function
   # Provide property for setting up CORS, Authorizer, iamRoleStatements
@@ -188,20 +154,15 @@ functions:
           authorizer: Auth
     iamRoleStatementInherit: true
     iamRoleStatements:
-      # - Effect: Allow
-      #   Action:
-      #     - s3:PutObject
-      #     - s3:GetObject
-      #   Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
-      - Effect: Allow
-        Action:
-          - dynamodb:UpdateItem
-        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"
       - Effect: Allow
         Action:
           - s3:PutObject
           - s3:GetObject
         Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: !GetAtt TodosTable.Arn  
 
 
 resources:

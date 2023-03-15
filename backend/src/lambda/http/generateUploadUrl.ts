@@ -17,9 +17,9 @@ export const handler = middy(
     const todoId = event.pathParameters.todoId
     // DONE: Return a presigned URL to upload a file for a TODO item with the provided id
 
+    await updateUrl(userId, todoId)
     const uploadUrl = await createAttachmentPresignedUrl(todoId)   
 
-    await updateUrl(todoId, userId )
     
     return  {
       statusCode: 201,
