@@ -33,6 +33,10 @@ provider:
     # Enable API Gateway logs
     restApi: true
 
+  iam:
+    role:
+      statements:
+
 
 functions:
 
@@ -50,7 +54,7 @@ functions:
           cors: true
           authorizer: Auth
     iamRoleStatementsInherit: true
-    iamRoleStatements::
+    iamRoleStatements:
       - Effect: Allow
         Action:
           - xray:PutTelemetryRecords
