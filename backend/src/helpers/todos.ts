@@ -30,9 +30,15 @@ export async function createTodo(userId: string, parsedBody:CreateTodoRequest ):
         createdAt,
         ...parsedBody,
         done: false,
-        attachmentUrl: `https://${bucketName}.s3.amazonaws.com/${todoId}`
+        attachmentUrl: null
     } 
     const result = await todoAccess.createTodo(newTodo)
+    return result;
+}
+export async function updateUrl(userId: string, todoId: string ): Promise<Object> {
+    const attachmentUrl =  `https://${bucketName}.s3.amazonaws.com/${todoId}`
+
+    const result = await todoAccess.addUrl(todoId, attachmentUrl, userId)
     return result;
 }
 
