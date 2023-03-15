@@ -50,7 +50,7 @@ functions:
           cors: true
           authorizer: Auth
     iamRoleStatementsInherit: true
-    iamRoleStatements:
+    iamRoleStatements::
       - Effect: Allow
         Action:
           - xray:PutTelemetryRecords
@@ -84,7 +84,7 @@ functions:
     iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
-          Action:
+        Action:
           - xray:PutTelemetryRecords
           - xray:PutTraceSegments
         Resource: "*"
@@ -110,7 +110,7 @@ functions:
     iamRoleStatementsInherit: true
     iamRoleStatements:
       - Effect: Allow
-          Action:
+        Action:
           - xray:PutTelemetryRecords
           - xray:PutTraceSegments
         Resource: "*"
